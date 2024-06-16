@@ -2,33 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta httpEquiv="x-ua-compatible" content="ie=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Book an Appointment</title>
     <meta name="description" content="Book an appointment with Divyansh Jain" />
-    <script
-      src="https://kit.fontawesome.com/9b3bbb804d.js"
-      crossorigin="anonymous"
-    ></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
+    <script src="https://kit.fontawesome.com/9b3bbb804d.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="styles.css" />
     <script type="module">
       // Import the functions you need from the SDKs you need
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-      import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+      import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
       // Your web app's Firebase configuration
       const firebaseConfig = {
         apiKey: "AIzaSyBNRdnlfcMabMPY0CuVK0O-U9Zl-FQrWWU",
         authDomain: "link-in-bio-740b1.firebaseapp.com",
         projectId: "link-in-bio-740b1",
-        storageBucket: "link-in-bio-740b1.appspot.com",
+        storageBucket: "link-in-bio-740b1",
         messagingSenderId: "267898937311",
         appId: "1:267898937311:web:225ac1be85a05494e2ee6a",
         measurementId: "G-DQJ619EGXK"
@@ -38,8 +29,40 @@
       const app = initializeApp(firebaseConfig);
       const database = getDatabase(app);
 
+      // Function to check for overlapping appointments
+      async function isSlotAvailable(date, time, duration) {
+        const dbRef = ref(database);
+        const appointmentsRef = child(dbRef, 'appointments');
+        const snapshot = await get(appointmentsRef);
+
+        if (!snapshot.exists()) {
+          return true;
+        }
+
+        const startTime = new Date(`${date}T${time}`).getTime();
+        const endTime = startTime + (duration === "1 hour" ? 60 : 30) * 60 * 1000;
+
+        const appointments = snapshot.val();
+        for (const key in appointments) {
+          if (appointments.hasOwnProperty(key)) {
+            const appointment = appointments[key];
+            const appointmentStart = appointment.startTime;
+            const appointmentEnd = appointment.endTime;
+
+            if ((startTime < appointmentEnd && endTime > appointmentStart) || 
+                (startTime < appointmentEnd && endTime > appointmentStart)) {
+              return false;
+            }
+          }
+        }
+        return true;
+      }
+
       // Function to write data to Firebase Realtime Database
       function writeAppointmentData(name, email, date, time, duration, type) {
+        const startTime = new Date(`${date}T${time}`).getTime();
+        const endTime = startTime + (duration === "1 hour" ? 60 : 30) * 60 * 1000;
+
         const appointmentRef = ref(database, 'appointments/' + Date.now());
         set(appointmentRef, {
           name: name,
@@ -47,12 +70,14 @@
           date: date,
           time: time,
           duration: duration,
-          type: type
+          type: type,
+          startTime: startTime,
+          endTime: endTime
         });
       }
 
       document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('appointmentForm').addEventListener('submit', function(event) {
+        document.getElementById('appointmentForm').addEventListener('submit', async function(event) {
           event.preventDefault();
           const name = document.getElementById('name').value;
           const email = document.getElementById('email').value;
@@ -61,8 +86,22 @@
           const duration = document.getElementById('duration').value;
           const type = document.getElementById('type').value;
 
-          writeAppointmentData(name, email, date, time, duration, type);
-          alert('Appointment booked successfully!');
+          const currentDateTime = new Date();
+          const appointmentDateTime = new Date(`${date}T${time}`);
+
+          if (appointmentDateTime < currentDateTime) {
+            alert('You cannot book an appointment in the past!');
+            return;
+          }
+
+          const slotAvailable = await isSlotAvailable(date, time, duration);
+
+          if (slotAvailable) {
+            writeAppointmentData(name, email, date, time, duration, type);
+            alert('Appointment booked successfully!');
+          } else {
+            alert('The selected time slot is not available. Please choose a different time.');
+          }
         });
       });
     </script>
@@ -73,6 +112,7 @@
         <div class="block">
           <div class="profile">
             <h1 class="animate__animated animate__bounce animate__delay-2s">Book an Appointment</h1>
+            <h2>Currently I'm only available between <span>3 PM to 5 PM</span></h2>
             <form id="appointmentForm" class="appointment-form">
               <div class="form-group">
                 <label for="name">Name</label>
