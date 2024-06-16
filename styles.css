@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: white;
+}
+
+blockquote,
+body,
+dd,
+dl,
+dt,
+fieldset,
+figure,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+html,
+iframe,
+legend,
+li,
+ol,
+p,
+pre,
+textarea,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: #7f8d9e;
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 1.58;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background-color: #2D3250;
+  font-family: 'Poppins', sans-serif;
+  display: block;
+  padding-bottom: 0;
+}
+
+*{
+    
+  font-family: 'Poppins', sans-serif;
+}
+
+a {
+  color: #3273dc;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #3273dc;
+}
+
+.outer {
+  text-align: center;
+  padding-bottom: 0;
+}
+
+.content {
+  max-width: 1000px;
+  min-height: 90vh;
+  margin: 56px auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 0;
+}
+
+.block {
+  text-align: center;
+  background-color: #424769;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+footer{
+  height: 80px;
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0 0 0;
+  margin-top: 20px;
+}
+
+.profile {
+  margin-top: -60px;
+}
+
+.profile h1 {
+  font-size: 1.6em;
+}
+
+.appointment-form {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: white;
+}
+
+.form-group .uniform-size {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.contactbutton {
+  background-color: #ffffff;
+  color: #484848;
+  border: #484848 1px solid;
+  border-radius: 20px;
+  cursor: pointer;
+  justify-content: center;
+  padding: 10px 20px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.contactbutton:hover {
+  color: rgb(0, 0, 0);
+  border: rgb(0, 0, 0) 1px solid;
+}

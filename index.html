@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta httpEquiv="x-ua-compatible" content="ie=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Book an Appointment</title>
+    <meta name="description" content="Book an appointment with Divyansh Jain" />
+    <script
+      src="https://kit.fontawesome.com/9b3bbb804d.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBNRdnlfcMabMPY0CuVK0O-U9Zl-FQrWWU",
+        authDomain: "link-in-bio-740b1.firebaseapp.com",
+        projectId: "link-in-bio-740b1",
+        storageBucket: "link-in-bio-740b1.appspot.com",
+        messagingSenderId: "267898937311",
+        appId: "1:267898937311:web:225ac1be85a05494e2ee6a",
+        measurementId: "G-DQJ619EGXK"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+
+      // Function to write data to Firebase Realtime Database
+      function writeAppointmentData(name, email, date, time, duration, type) {
+        const appointmentRef = ref(database, 'appointments/' + Date.now());
+        set(appointmentRef, {
+          name: name,
+          email: email,
+          date: date,
+          time: time,
+          duration: duration,
+          type: type
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('appointmentForm').addEventListener('submit', function(event) {
+          event.preventDefault();
+          const name = document.getElementById('name').value;
+          const email = document.getElementById('email').value;
+          const date = document.getElementById('date').value;
+          const time = document.getElementById('time').value;
+          const duration = document.getElementById('duration').value;
+          const type = document.getElementById('type').value;
+
+          writeAppointmentData(name, email, date, time, duration, type);
+          alert('Appointment booked successfully!');
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="outer">
+      <div class="content">
+        <div class="block">
+          <div class="profile">
+            <h1 class="animate__animated animate__bounce animate__delay-2s">Book an Appointment</h1>
+            <form id="appointmentForm" class="appointment-form">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" class="uniform-size" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" class="uniform-size" required>
+              </div>
+              <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" class="uniform-size" required>
+              </div>
+              <div class="form-group">
+                <label for="time">Time</label>
+                <input type="time" id="time" class="uniform-size" min="15:00" max="17:00" required>
+              </div>
+              <div class="form-group">
+                <label for="duration">Duration</label>
+                <select id="duration" class="uniform-size" required>
+                  <option value="30 minutes">30 minutes</option>
+                  <option value="1 hour">1 hour</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="type">Type</label>
+                <select id="type" class="uniform-size" required>
+                  <option value="Meeting">Meeting</option>
+                  <option value="Session">Session</option>
+                  <option value="Connection Call">Connection Call</option>
+                </select>
+              </div>
+              <button type="submit" class="contactbutton">Book Appointment</button>
+            </form>
+          </div>
+        </div>
+        <footer>
+          &copy; 2023 Divyansh Jain<br/>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
